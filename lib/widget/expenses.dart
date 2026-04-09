@@ -15,13 +15,19 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => NewExpense(onAddExpense: _addExpense),
+      builder: (ctx) => NewExpense(
+        onAddExpense: _addExpense)
     );
   }
-
   void _addExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
+    });
+  }
+
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
     });
   }
 
@@ -38,10 +44,9 @@ class _ExpensesState extends State<Expenses> {
       date: DateTime.now(),
       category: Category.travel,
     ),
-
     Expense(
-      title: "Movie Night",
-      amount: 12.50,
+      title: "Movie Ticket",
+      amount: 18.00,
       date: DateTime.now(),
       category: Category.leisure,
     ),
@@ -51,19 +56,22 @@ class _ExpensesState extends State<Expenses> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expense Tracker'),
-
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.add), 
             onPressed: _openAddExpenseOverlay,
           ),
         ],
       ),
       body: Column(
         children: [
-          const Text('Chart Goes here'),
-          const SizedBox(height: 30),
-          Expanded(child: ExpensesList(expenses: _registeredExpenses)),
+          Text('CHART GOES HERE'),
+          Expanded(
+            child: ExpensesList(
+              onRemoveExpense: _removeExpense,
+              expenses: _registeredExpenses
+            ),
+          ),
         ],
       ),
     );
