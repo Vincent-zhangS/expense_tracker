@@ -19,7 +19,7 @@ class _NewExpenseState extends State<NewExpense> {
   DateTime? _selectedDate;
   Category _selectedCategory = Category.travel;
 
-  void _submitExpenseData() {
+    void _submitExpenseData() {
     final enteredAmount = double.tryParse(_amountController.text);
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
@@ -44,7 +44,16 @@ class _NewExpenseState extends State<NewExpense> {
       );
       return;
     }
-  } // <--- Added this closing brace to end _submitExpenseData
+    widget.onAddExpense(
+      Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      ),
+    );
+    Navigator.pop(context);
+  }
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -137,12 +146,8 @@ class _NewExpenseState extends State<NewExpense> {
                   },
                   child: const Text("Cancel")),
               ElevatedButton(
-                  onPressed: () {
-                    print(_titleController.text);
-                    print(_amountController.text);
-                    print(_selectedCategory);
-                  },
-                  child: const Text("Save Expense")),
+                onPressed: _submitExpenseData,
+                child: const Text('Save Expense')),
             ],
           )
         ],
